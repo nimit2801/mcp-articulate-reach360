@@ -1,0 +1,36 @@
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "MCP Server"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "setup"
+
+[[workflows.workflow]]
+name = "MCP Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install @modelcontextprotocol/sdk node-fetch zod dotenv && npm install -D typescript @types/node && npx tsc && node dist/index.js"
+
+[[workflows.workflow]]
+name = "setup"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install @modelcontextprotocol/sdk node-fetch zod dotenv && npm install -D typescript @types/node"
