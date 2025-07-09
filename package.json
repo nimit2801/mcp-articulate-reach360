@@ -1,16 +1,19 @@
 {
-  "name": "workspace",
+  "name": "mcp-articulate-reach360",
   "version": "1.0.0",
-  "description": "A Model Context Protocol (MCP) server that provides AI applications with access to Reach 360 LMS functionality through standardized tools and resources.",
+  "description": "A CLI MCP server for Articulate Reach360 LMS integration.",
+  "bin": {
+    "mcp-articulate-reach360": "dist/index.js"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Nimit2801 <mnimitsavant@outlook.com>",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.15.0",
     "dotenv": "^17.2.0",
