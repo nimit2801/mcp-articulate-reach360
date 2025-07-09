@@ -58,7 +58,8 @@ class Reach360MCPServer {
           // User management tools
           {
             name: "list_users",
-            description: "List all users in the Reach 360 account with optional email filter",
+            description:
+              "List all users in the Reach 360 account with optional email filter",
             inputSchema: {
               type: "object",
               properties: {
@@ -123,7 +124,13 @@ class Reach360MCPServer {
                 contentType: {
                   type: "string",
                   description: "Filter by content type",
-                  enum: ["rise", "storyline", "microlearning", "imported", "all"],
+                  enum: [
+                    "rise",
+                    "storyline",
+                    "microlearning",
+                    "imported",
+                    "all",
+                  ],
                 },
                 cursor: {
                   type: "string",
@@ -316,6 +323,18 @@ class Reach360MCPServer {
             },
           },
         ],
+        examplePrompts: [
+          "List all users from the Reach360 account.",
+          "Get details of the user with email 'john.doe@example.com'.",
+          "List all groups in the Reach360 account.",
+          "Get details of the group named 'Employees'.",
+          "List all courses available in Reach360.",
+          "Get details of the course with ID 'abc123'.",
+          "Enroll the user with email 'jane.doe@example.com' in the course 'Onboarding 101'.",
+          "Unenroll the user with email 'jane.doe@example.com' from the course 'Onboarding 101'.",
+          "Create a new group named 'New Hires'.",
+          "Delete the user with email 'john.doe@example.com' from the Reach360 account.",
+        ],
       };
     });
 
@@ -375,13 +394,16 @@ class Reach360MCPServer {
     });
 
     // Read resource content
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-      try {
-        return await this.resourceProvider.readResource(request.params.uri);
-      } catch (error) {
-        throw handleError(error);
+    this.server.setRequestHandler(
+      ReadResourceRequestSchema,
+      async (request) => {
+        try {
+          return await this.resourceProvider.readResource(request.params.uri);
+        } catch (error) {
+          throw handleError(error);
+        }
       }
-    });
+    );
   }
 
   async start() {
