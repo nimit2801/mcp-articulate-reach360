@@ -1,6 +1,6 @@
 {
   "name": "mcp-articulate-reach360",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI MCP server for Articulate Reach360 LMS integration.",
   "bin": {
     "mcp-articulate-reach360": "dist/index.js"
