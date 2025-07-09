@@ -4,7 +4,9 @@
   "description": "A Model Context Protocol (MCP) server that provides AI applications with access to Reach 360 LMS functionality through standardized tools and resources.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",

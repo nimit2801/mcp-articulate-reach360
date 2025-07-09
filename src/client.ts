@@ -13,7 +13,7 @@ export class Reach360Client {
 
   async makeRequest<T>(options: ApiRequestOptions): Promise<T> {
     const { method, endpoint, params, body } = options;
-    
+
     // Build URL with query parameters
     const url = new URL(`${this.config.baseUrl}${endpoint}`);
     if (params) {
@@ -24,7 +24,7 @@ export class Reach360Client {
 
     // Prepare headers
     const headers: Record<string, string> = {
-      "Authorization": `Bearer ${this.config.apiKey}`,
+      Authorization: `Bearer ${this.config.apiKey}`,
       "API-Version": this.config.apiVersion,
       "Content-Type": "application/json",
     };
@@ -36,59 +36,70 @@ export class Reach360Client {
     }
 
     // Make request using Node.js built-in HTTP(S) module
-    const isHttps = url.protocol === 'https:';
+    const isHttps = url.protocol === "https:";
     const httpModule = isHttps ? https : http;
 
     return new Promise<T>((resolve, reject) => {
-      const req = httpModule.request(url, {
-        method,
-        headers,
-      }, (res) => {
-        let responseText = '';
-        
-        res.on('data', (chunk) => {
-          responseText += chunk;
-        });
-        
-        res.on('end', () => {
-          let responseData: any;
-          
-          try {
-            responseData = responseText ? JSON.parse(responseText) : {};
-          } catch (e) {
-            reject(new Error(`Invalid JSON response: ${responseText}`));
-            return;
-          }
+      const req = httpModule.request(
+        url,
+        {
+          method,
+          headers,
+        },
+        (res) => {
+          let responseText = "";
 
-          if (!res.statusCode || res.statusCode >= 400) {
-            // Try to parse as error response
-            const errorResult = ErrorResponseSchema.safeParse(responseData);
-            if (errorResult.success) {
-              const errors = errorResult.data.errors.map(e => `${e.code}: ${e.message}`).join(", ");
-              reject(new Error(`API Error (${res.statusCode}): ${errors}`));
-            } else {
-              reject(new Error(`HTTP Error ${res.statusCode}: ${responseText}`));
+          res.on("data", (chunk) => {
+            responseText += chunk;
+          });
+
+          res.on("end", () => {
+            let responseData: any;
+
+            try {
+              responseData = responseText ? JSON.parse(responseText) : {};
+            } catch (e) {
+              reject(new Error(`Invalid JSON response: ${responseText}`));
+              return;
             }
-            return;
-          }
 
-          resolve(responseData as T);
-        });
-      });
+            if (!res.statusCode || res.statusCode >= 400) {
+              // Try to parse as error response
+              const errorResult = ErrorResponseSchema.safeParse(responseData);
+              if (errorResult.success) {
+                const errors = errorResult.data.errors
+                  .map((e) => `${e.code}: ${e.message}`)
+                  .join(", ");
+                reject(new Error(`API Error (${res.statusCode}): ${errors}`));
+              } else {
+                reject(
+                  new Error(`HTTP Error ${res.statusCode}: ${responseText}`)
+                );
+              }
+              return;
+            }
 
-      req.on('error', (error) => {
+            resolve(responseData as T);
+          });
+        }
+      );
+
+      req.on("error", (error) => {
         reject(new Error(`Request failed: ${error.message}`));
       });
 
       if (requestBody) {
         req.write(requestBody);
       }
-      
+
       req.end();
     });
   }
 
-  async get<T>(endpoint: string, params?: Record<string, string | number>): Promise<T> {
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, string | number>
+  ): Promise<T> {
     return this.makeRequest<T>({
       method: "GET",
       endpoint,
@@ -96,7 +107,11 @@ export class Reach360Client {
     });
   }
 
-  async post<T>(endpoint: string, body?: any, params?: Record<string, string | number>): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    body?: any,
+    params?: Record<string, string | number>
+  ): Promise<T> {
     return this.makeRequest<T>({
       method: "POST",
       endpoint,
@@ -105,7 +120,11 @@ export class Reach360Client {
     });
   }
 
-  async put<T>(endpoint: string, body?: any, params?: Record<string, string | number>): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    body?: any,
+    params?: Record<string, string | number>
+  ): Promise<T> {
     return this.makeRequest<T>({
       method: "PUT",
       endpoint,
@@ -114,7 +133,10 @@ export class Reach360Client {
     });
   }
 
-  async delete<T>(endpoint: string, params?: Record<string, string | number>): Promise<T> {
+  async delete<T>(
+    endpoint: string,
+    params?: Record<string, string | number>
+  ): Promise<T> {
     return this.makeRequest<T>({
       method: "DELETE",
       endpoint,
