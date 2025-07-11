@@ -10,6 +10,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+### July 11, 2025
+- ✅ Added comprehensive Reports API functionality to the MCP server
+- ✅ Implemented 6 new report tools: activity, course, learner, group courses, learning path courses, and learning path learners reports
+- ✅ Added report resource providers for standardized URI-based report access
+- ✅ Extended type definitions with complete report schemas and validation
+- ✅ Updated server to handle pagination limits up to 2000 for reports (as per API specification)
+- ✅ Server successfully rebuilt and running with all new reports functionality
+
 ### July 9, 2025
 - ✅ Successfully built and deployed a fully functional MCP server for Reach 360 LMS
 - ✅ Configured TypeScript compilation for CommonJS compatibility
@@ -50,6 +58,7 @@ The application follows a modular TypeScript architecture built around the Model
 - **CourseTools** (`src/tools/courses.ts`): List and get course information
 - **GroupTools** (`src/tools/groups.ts`): Full CRUD operations for groups
 - **EnrollmentTools** (`src/tools/enrollments.ts`): Manage course enrollments and group memberships
+- **ReportTools** (`src/tools/reports.ts`): Comprehensive reporting functionality including activity, course, learner, group, and learning path reports
 
 ### 4. Resource Provider (`src/resources/index.ts`)
 - Exposes data through standardized URIs like `reach360://users` and `reach360://user/{userId}`

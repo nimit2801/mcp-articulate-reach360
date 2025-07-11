@@ -9,6 +9,7 @@ A Model Context Protocol (MCP) server that provides AI applications with access 
 - **Course Management**: List and get course details
 - **Group Management**: Create, read, update, and delete groups
 - **Enrollment Management**: Enroll/unenroll users in courses, manage group memberships
+- **Reports Management**: Comprehensive reporting including activity reports, course reports, learner reports, group courses reports, and learning path reports
 
 ### Resources
 - Access to user, course, and group data through standardized URIs

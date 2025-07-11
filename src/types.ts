@@ -158,6 +158,173 @@ export const GetGroupUsersInputSchema = z.object({
   cursor: z.string().optional(),
 });
 
+// Report Input Schemas
+export const ActivityReportInputSchema = z.object({
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+export const CourseReportInputSchema = z.object({
+  courseId: z.string(),
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+export const LearnerReportInputSchema = z.object({
+  userId: z.string(),
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+export const GroupCoursesReportInputSchema = z.object({
+  groupId: z.string(),
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+export const LearningPathCoursesReportInputSchema = z.object({
+  learningPathId: z.string(),
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+export const LearningPathLearnersReportInputSchema = z.object({
+  learningPathId: z.string(),
+  limit: z.number().min(1).max(2000).optional(),
+  cursor: z.string().optional(),
+});
+
+// Report Response Types
+export const ActivitySessionSchema = z.object({
+  userId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  userUrl: z.string().url(),
+  sessionStartedAt: z.string(),
+  sessionEndedAt: z.string().nullable(),
+  duration: z.string().nullable(),
+  courseId: z.string(),
+  courseTitle: z.string(),
+  courseUrl: z.string().url(),
+  contentType: z.string(),
+  progress: z.number(),
+  status: z.enum(["Not Started", "In Progress", "Complete"]),
+});
+
+export const ActivityReportResponseSchema = z.object({
+  activities: z.array(ActivitySessionSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type ActivityReportResponse = z.infer<typeof ActivityReportResponseSchema>;
+
+export const CourseLearnerSchema = z.object({
+  userId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  learnerReportUrl: z.string().url(),
+  userUrl: z.string().url(),
+  duration: z.string().nullable(),
+  progress: z.number(),
+  quizScorePercent: z.number().nullable(),
+  dueAt: z.string().nullable(),
+  status: z.enum(["Not Started", "In Progress", "Complete"]),
+  userDeleted: z.boolean(),
+  completedAt: z.string().nullable(),
+});
+
+export const CourseReportResponseSchema = z.object({
+  courseDeleted: z.boolean(),
+  courseUrl: z.string().url(),
+  learners: z.array(CourseLearnerSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type CourseReportResponse = z.infer<typeof CourseReportResponseSchema>;
+
+export const LearnerCourseSchema = z.object({
+  completedAt: z.string().nullable(),
+  courseDeleted: z.boolean(),
+  courseId: z.string(),
+  courseTitle: z.string(),
+  courseReportUrl: z.string().url(),
+  courseUrl: z.string().url(),
+  duration: z.string().nullable(),
+  progress: z.number(),
+  quizScorePercent: z.number().nullable(),
+  dueAt: z.string().nullable(),
+  status: z.enum(["Not Started", "In Progress", "Complete"]),
+});
+
+export const LearnerReportResponseSchema = z.object({
+  userDeleted: z.boolean(),
+  userUrl: z.string().url(),
+  courses: z.array(LearnerCourseSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type LearnerReportResponse = z.infer<typeof LearnerReportResponseSchema>;
+
+export const GroupCourseSchema = z.object({
+  courseDeleted: z.boolean(),
+  courseId: z.string(),
+  courseTitle: z.string(),
+  courseUrl: z.string().url(),
+  numberOfLessons: z.number(),
+  averageDuration: z.string().nullable(),
+  courseReportUrl: z.string().url(),
+});
+
+export const GroupCoursesReportResponseSchema = z.object({
+  groupDeleted: z.boolean(),
+  groupUrl: z.string().url(),
+  courses: z.array(GroupCourseSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type GroupCoursesReportResponse = z.infer<typeof GroupCoursesReportResponseSchema>;
+
+export const LearningPathCourseSchema = z.object({
+  courseDeleted: z.boolean(),
+  courseId: z.string(),
+  courseTitle: z.string(),
+  courseUrl: z.string().url(),
+  numberOfLessons: z.number(),
+  averageDuration: z.string().nullable(),
+  courseReportUrl: z.string().url(),
+});
+
+export const LearningPathCoursesReportResponseSchema = z.object({
+  learningPathDeleted: z.boolean(),
+  learningPathUrl: z.string().url(),
+  learnersReportUrl: z.string().url(),
+  courses: z.array(LearningPathCourseSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type LearningPathCoursesReportResponse = z.infer<typeof LearningPathCoursesReportResponseSchema>;
+
+export const LearningPathLearnerSchema = z.object({
+  dueAt: z.string().nullable(),
+  duration: z.string().nullable(),
+  firstName: z.string(),
+  lastName: z.string(),
+  learnerReportUrl: z.string().url(),
+  status: z.enum(["Not Started", "In Progress", "Complete"]),
+  userDeleted: z.boolean(),
+  userId: z.string(),
+  userUrl: z.string().url(),
+});
+
+export const LearningPathLearnersReportResponseSchema = z.object({
+  learningPathUrl: z.string().url(),
+  coursesReportUrl: z.string().url(),
+  learners: z.array(LearningPathLearnerSchema),
+  nextUrl: z.string().nullable(),
+});
+
+export type LearningPathLearnersReportResponse = z.infer<typeof LearningPathLearnersReportResponseSchema>;
+
 // API Request Types
 export interface ApiRequestOptions {
   method: "GET" | "POST" | "PUT" | "DELETE";

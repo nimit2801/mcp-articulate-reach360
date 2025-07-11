@@ -14,6 +14,7 @@ import { UserTools } from "./tools/users";
 import { CourseTools } from "./tools/courses";
 import { GroupTools } from "./tools/groups";
 import { EnrollmentTools } from "./tools/enrollments";
+import { ReportTools } from "./tools/reports";
 import { ResourceProvider } from "./resources/index";
 import { handleError } from "./utils/errors";
 
@@ -24,6 +25,7 @@ class Reach360MCPServer {
   private courseTools: CourseTools;
   private groupTools: GroupTools;
   private enrollmentTools: EnrollmentTools;
+  private reportTools: ReportTools;
   private resourceProvider: ResourceProvider;
 
   constructor() {
@@ -45,6 +47,7 @@ class Reach360MCPServer {
     this.courseTools = new CourseTools(this.client);
     this.groupTools = new GroupTools(this.client);
     this.enrollmentTools = new EnrollmentTools(this.client);
+    this.reportTools = new ReportTools(this.client);
     this.resourceProvider = new ResourceProvider(this.client);
 
     this.setupHandlers();
@@ -322,6 +325,146 @@ class Reach360MCPServer {
               required: ["groupId"],
             },
           },
+          // Report tools
+          {
+            name: "get_activity_report",
+            description: "Get user activity report (list of user sessions)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+            },
+          },
+          {
+            name: "get_course_report",
+            description: "Get course learner report (list of learner sessions for a specific course)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                courseId: {
+                  type: "string",
+                  description: "The ID of the course",
+                },
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+              required: ["courseId"],
+            },
+          },
+          {
+            name: "get_learner_report",
+            description: "Get learner course report (list of course sessions for a specific learner)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                userId: {
+                  type: "string",
+                  description: "The ID of the user",
+                },
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+              required: ["userId"],
+            },
+          },
+          {
+            name: "get_group_courses_report",
+            description: "Get group courses report (list of course sessions in a group)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                groupId: {
+                  type: "string",
+                  description: "The ID of the group",
+                },
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+              required: ["groupId"],
+            },
+          },
+          {
+            name: "get_learning_path_courses_report",
+            description: "Get learning path courses report (list of courses in a learning path)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                learningPathId: {
+                  type: "string",
+                  description: "The ID of the learning path",
+                },
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+              required: ["learningPathId"],
+            },
+          },
+          {
+            name: "get_learning_path_learners_report",
+            description: "Get learning path learners report (list of learner sessions in a learning path)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                learningPathId: {
+                  type: "string",
+                  description: "The ID of the learning path",
+                },
+                limit: {
+                  type: "number",
+                  description: "Number of results per page (1-2000, default 50)",
+                  minimum: 1,
+                  maximum: 2000,
+                },
+                cursor: {
+                  type: "string",
+                  description: "Pagination cursor for next page",
+                },
+              },
+              required: ["learningPathId"],
+            },
+          },
         ],
         examplePrompts: [
           "List all users from the Reach360 account.",
@@ -379,6 +522,20 @@ class Reach360MCPServer {
             return await this.enrollmentTools.getUserGroups(args);
           case "get_group_users":
             return await this.enrollmentTools.getGroupUsers(args);
+
+          // Report tools
+          case "get_activity_report":
+            return await this.reportTools.getActivityReport(args);
+          case "get_course_report":
+            return await this.reportTools.getCourseReport(args);
+          case "get_learner_report":
+            return await this.reportTools.getLearnerReport(args);
+          case "get_group_courses_report":
+            return await this.reportTools.getGroupCoursesReport(args);
+          case "get_learning_path_courses_report":
+            return await this.reportTools.getLearningPathCoursesReport(args);
+          case "get_learning_path_learners_report":
+            return await this.reportTools.getLearningPathLearnersReport(args);
 
           default:
             throw new Error(`Unknown tool: ${name}`);

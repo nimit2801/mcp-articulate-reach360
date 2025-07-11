@@ -54,6 +54,43 @@ export class ResourceProvider {
           description: "Users that belong to a specific group",
           mimeType: "application/json",
         },
+        // Report resources
+        {
+          uri: "reach360://reports/activity",
+          name: "Activity Report",
+          description: "User activity report showing all user sessions",
+          mimeType: "application/json",
+        },
+        {
+          uri: "reach360://reports/course/{courseId}",
+          name: "Course Report",
+          description: "Course learner report showing learner sessions for a specific course",
+          mimeType: "application/json",
+        },
+        {
+          uri: "reach360://reports/learner/{userId}",
+          name: "Learner Report",
+          description: "Learner course report showing course sessions for a specific learner",
+          mimeType: "application/json",
+        },
+        {
+          uri: "reach360://reports/group/{groupId}/courses",
+          name: "Group Courses Report",
+          description: "Group courses report showing course sessions in a group",
+          mimeType: "application/json",
+        },
+        {
+          uri: "reach360://reports/learning-path/{learningPathId}/courses",
+          name: "Learning Path Courses Report",
+          description: "Learning path courses report showing courses in a learning path",
+          mimeType: "application/json",
+        },
+        {
+          uri: "reach360://reports/learning-path/{learningPathId}/learners",
+          name: "Learning Path Learners Report",
+          description: "Learning path learners report showing learner sessions in a learning path",
+          mimeType: "application/json",
+        },
       ],
     };
   }
@@ -176,6 +213,87 @@ export class ResourceProvider {
             // Get user groups
             const userId = uriParts[1];
             const response = await this.client.get(`/users/${userId}/groups`, { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          }
+          break;
+
+        case "reports":
+          if (uriParts.length === 2 && uriParts[1] === "activity") {
+            // Get activity report
+            const response = await this.client.get("/reports/activity", { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          } else if (uriParts.length === 3 && uriParts[1] === "course") {
+            // Get course report
+            const courseId = uriParts[2];
+            const response = await this.client.get(`/reports/courses/${courseId}`, { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          } else if (uriParts.length === 3 && uriParts[1] === "learner") {
+            // Get learner report
+            const userId = uriParts[2];
+            const response = await this.client.get(`/reports/learners/${userId}`, { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          } else if (uriParts.length === 4 && uriParts[1] === "group" && uriParts[3] === "courses") {
+            // Get group courses report
+            const groupId = uriParts[2];
+            const response = await this.client.get(`/reports/groups/${groupId}/courses`, { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          } else if (uriParts.length === 4 && uriParts[1] === "learning-path" && uriParts[3] === "courses") {
+            // Get learning path courses report
+            const learningPathId = uriParts[2];
+            const response = await this.client.get(`/reports/learning-paths/${learningPathId}/courses`, { limit: 100 });
+            return {
+              contents: [
+                {
+                  uri,
+                  mimeType: "application/json",
+                  text: JSON.stringify(response, null, 2),
+                },
+              ],
+            };
+          } else if (uriParts.length === 4 && uriParts[1] === "learning-path" && uriParts[3] === "learners") {
+            // Get learning path learners report
+            const learningPathId = uriParts[2];
+            const response = await this.client.get(`/reports/learning-paths/${learningPathId}/learners`, { limit: 100 });
             return {
               contents: [
                 {
